@@ -158,7 +158,7 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                         FutureBuilder<dynamic>(
                           future: checkGuessCall(
                             guess: int.parse(textController.text),
-                            answer: rowRecord.correct,
+                            answer: columnUsersRecord.correct,
                           ),
                           builder: (context, snapshot) {
                             // Customize what your widget looks like when it's loading.
@@ -176,6 +176,17 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                           },
                         )
                       ],
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        print('IconButton pressed ...');
+                      },
+                      icon: Icon(
+                        Icons.logout,
+                        color: FlutterFlowTheme.tertiaryColor,
+                        size: 35,
+                      ),
+                      iconSize: 35,
                     )
                   ],
                 );
