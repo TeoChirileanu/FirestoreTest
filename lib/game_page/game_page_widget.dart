@@ -5,7 +5,6 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../login_page/login_page_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -91,15 +90,8 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                   ],
                 ),
                 FFButtonWidget(
-                  onPressed: () async {
-                    final response =
-                        getJsonField(buttonResponse, r'$.verdict').toString();
-
-                    final usersRecordData = createUsersRecordData(
-                      response: response,
-                    );
-
-                    await columnRecord.reference.update(usersRecordData);
+                  onPressed: () {
+                    print('Button pressed ...');
                   },
                   text: 'Check',
                   options: FFButtonOptions(
@@ -133,25 +125,12 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FutureBuilder<dynamic>(
-                      future: checkGuessCall(
-                        guess: int.parse(textController.text),
-                        answer: columnRecord.correct,
+                    Text(
+                      'Hello World',
+                      style: FlutterFlowTheme.title1.override(
+                        fontFamily: 'Poppins',
+                        color: FlutterFlowTheme.tertiaryColor,
                       ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        final textCheckGuessResponse = snapshot.data;
-                        return Text(
-                          'Hello World',
-                          style: FlutterFlowTheme.title1.override(
-                            fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.tertiaryColor,
-                          ),
-                        );
-                      },
                     )
                   ],
                 ),
