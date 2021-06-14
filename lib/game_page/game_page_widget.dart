@@ -27,7 +27,7 @@ class _GamePageWidgetState extends State<GamePageWidget> {
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    textController = TextEditingController(text: '0');
   }
 
   @override
@@ -52,6 +52,12 @@ class _GamePageWidgetState extends State<GamePageWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Text(
+                  'Enter Your Guess:',
+                  style: FlutterFlowTheme.title1.override(
+                    fontFamily: 'Poppins',
+                  ),
+                ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -61,10 +67,6 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                         controller: textController,
                         obscureText: false,
                         decoration: InputDecoration(
-                          hintText: 'Enter Your Guess',
-                          hintStyle: FlutterFlowTheme.title1.override(
-                            fontFamily: 'Poppins',
-                          ),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: Color(0x00000000),
@@ -130,12 +132,26 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      widget.answer.toString(),
-                      style: FlutterFlowTheme.title1.override(
-                        fontFamily: 'Poppins',
-                        color: FlutterFlowTheme.tertiaryColor,
+                    FutureBuilder<dynamic>(
+                      future: checkGuessCall(
+                        guess: int.parse(textController.text),
+                        answer: widget.answer,
                       ),
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        final textCheckGuessResponse = snapshot.data;
+                        return Text(
+                          getJsonField(textCheckGuessResponse, r'$.verdict')
+                              .toString(),
+                          style: FlutterFlowTheme.title1.override(
+                            fontFamily: 'Poppins',
+                            color: FlutterFlowTheme.tertiaryColor,
+                          ),
+                        );
+                      },
                     )
                   ],
                 ),
