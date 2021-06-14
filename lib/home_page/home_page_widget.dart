@@ -54,7 +54,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => GamePageWidget(
-                              answer: 99,
+                              answer: getJsonField(
+                                  buttonGetRandomNumberResponse,
+                                  r'$.correct_number'),
                             ),
                           ),
                         );
