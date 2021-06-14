@@ -36,7 +36,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             alignment: Alignment(0, 0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -80,6 +80,42 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           ),
                           borderRadius: 12,
                         ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FFButtonWidget(
+                      onPressed: () async {
+                        final user = await signInAnonymously(context);
+                        if (user == null) {
+                          return;
+                        }
+                        await Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePageWidget(),
+                          ),
+                          (r) => false,
+                        );
+                      },
+                      text: 'Button',
+                      options: FFButtonOptions(
+                        width: 130,
+                        height: 40,
+                        color: FlutterFlowTheme.primaryColor,
+                        textStyle: FlutterFlowTheme.subtitle2.override(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: 12,
                       ),
                     )
                   ],
