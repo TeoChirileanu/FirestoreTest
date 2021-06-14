@@ -21,84 +21,72 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<UsersRecord>(
-      stream: UsersRecord.getDocument(currentUserReference),
-      builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
-        final homePageUsersRecord = snapshot.data;
-        return Scaffold(
-          key: scaffoldKey,
-          body: Stack(
-            children: [
-              Align(
-                alignment: Alignment(0, 0),
-                child: Image.network(
-                  'https://picsum.photos/seed/315/600',
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Align(
-                alignment: Alignment(0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    FutureBuilder<dynamic>(
-                      future: getRandomNumberCall(),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        final buttonGetRandomNumberResponse = snapshot.data;
-                        return FFButtonWidget(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => GamePageWidget(),
-                              ),
-                            );
-                            final correct = getJsonField(
-                                buttonGetRandomNumberResponse,
-                                r'$.correct_number');
-
-                            final usersRecordData = createUsersRecordData(
-                              correct: correct,
-                            );
-
-                            await currentUserReference.update(usersRecordData);
-                          },
-                          text: 'Play',
-                          options: FFButtonOptions(
-                            width: 130,
-                            height: 40,
-                            color: Color(0x7A3474E0),
-                            textStyle: FlutterFlowTheme.title1.override(
-                              fontFamily: 'Poppins',
-                            ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: 12,
+    return Scaffold(
+      key: scaffoldKey,
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment(0, 0),
+            child: Image.network(
+              'https://picsum.photos/seed/315/600',
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Align(
+            alignment: Alignment(0, 0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                FutureBuilder<dynamic>(
+                  future: getRandomNumberCall(),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    final buttonGetRandomNumberResponse = snapshot.data;
+                    return FFButtonWidget(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GamePageWidget(),
                           ),
                         );
+                        final correct = 99;
+
+                        final usersRecordData = createUsersRecordData(
+                          correct: correct,
+                        );
+
+                        await currentUserReference.update(usersRecordData);
                       },
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        );
-      },
+                      text: 'Play',
+                      options: FFButtonOptions(
+                        width: 130,
+                        height: 40,
+                        color: Color(0x7A3474E0),
+                        textStyle: FlutterFlowTheme.title1.override(
+                          fontFamily: 'Poppins',
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: 12,
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
