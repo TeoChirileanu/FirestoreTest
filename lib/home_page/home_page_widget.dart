@@ -5,6 +5,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../game_page/game_page_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -53,13 +54,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => GamePageWidget(
-                              answer: getJsonField(
-                                  buttonGetRandomNumberResponse,
-                                  r'$.correct_number'),
-                            ),
+                            builder: (context) => GamePageWidget(),
                           ),
                         );
+                        final correct = getJsonField(
+                            buttonGetRandomNumberResponse, r'$.correct_number');
+
+                        final usersRecordData = createUsersRecordData(
+                          correct: correct,
+                        );
+
+                        await currentUserReference.update(usersRecordData);
                       },
                       text: 'Play',
                       options: FFButtonOptions(
