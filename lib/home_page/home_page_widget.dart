@@ -51,17 +51,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     final buttonGetRandomNumberResponse = snapshot.data;
                     return FFButtonWidget(
                       onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GamePageWidget(),
-                          ),
-                        );
-                        final correct = 99;
-
-                        final usersRecordData = createUsersRecordData(
-                          correct: correct,
-                        );
+                        final usersRecordData = createUsersRecordData();
 
                         await currentUserReference.update(usersRecordData);
                       },
