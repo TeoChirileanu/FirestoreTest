@@ -97,8 +97,13 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                   ],
                 ),
                 FFButtonWidget(
-                  onPressed: () {
-                    print('Button pressed ...');
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GamePageWidget(),
+                      ),
+                    );
                   },
                   text: 'Check',
                   options: FFButtonOptions(
