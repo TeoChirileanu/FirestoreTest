@@ -98,6 +98,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     );
 
                     await currentUserReference.update(usersRecordData);
+                    final usersRecordData = {
+                      'guess': FieldValue.delete(),
+                    };
+
+                    await currentUserReference.update(usersRecordData);
                   },
                   text: 'Button',
                   options: FFButtonOptions(
