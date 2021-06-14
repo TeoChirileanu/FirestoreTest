@@ -62,9 +62,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => GamePageWidget(
-                                  correct: 99,
-                                ),
+                                builder: (context) => GamePageWidget(),
                               ),
                             );
                             final correct = getJsonField(

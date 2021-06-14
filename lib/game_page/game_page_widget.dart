@@ -1,16 +1,13 @@
+import '../auth/auth_util.dart';
 import '../backend/api_requests/api_calls.dart';
+import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GamePageWidget extends StatefulWidget {
-  GamePageWidget({
-    Key key,
-    this.correct,
-  }) : super(key: key);
-
-  final int correct;
+  GamePageWidget({Key key}) : super(key: key);
 
   @override
   _GamePageWidgetState createState() => _GamePageWidgetState();
@@ -103,32 +100,42 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                     )
                   ],
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FutureBuilder<dynamic>(
-                      future: checkGuessCall(
-                        guess: int.parse(textController.text),
-                        answer: widget.correct,
-                      ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        final textCheckGuessResponse = snapshot.data;
-                        return Text(
-                          getJsonField(textCheckGuessResponse, r'$.verdict')
-                              .toString(),
-                          style: FlutterFlowTheme.title1.override(
-                            fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.tertiaryColor,
+                StreamBuilder<UsersRecord>(
+                  stream: UsersRecord.getDocument(currentUserReference),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    final rowUsersRecord = snapshot.data;
+                    return Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FutureBuilder<dynamic>(
+                          future: checkGuessCall(
+                            guess: int.parse(textController.text),
+                            answer: rowUsersRecord.correct,
                           ),
-                        );
-                      },
-                    )
-                  ],
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            final textCheckGuessResponse = snapshot.data;
+                            return Text(
+                              getJsonField(textCheckGuessResponse, r'$.verdict')
+                                  .toString(),
+                              style: FlutterFlowTheme.title1.override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.tertiaryColor,
+                              ),
+                            );
+                          },
+                        )
+                      ],
+                    );
+                  },
                 )
               ],
             ),
