@@ -9,7 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GamePageWidget extends StatefulWidget {
-  GamePageWidget({Key key}) : super(key: key);
+  GamePageWidget({
+    Key key,
+    this.answer,
+  }) : super(key: key);
+
+  final int answer;
 
   @override
   _GamePageWidgetState createState() => _GamePageWidgetState();
@@ -126,7 +131,7 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Hello World',
+                      widget.answer.toString(),
                       style: FlutterFlowTheme.title1.override(
                         fontFamily: 'Poppins',
                         color: FlutterFlowTheme.tertiaryColor,
