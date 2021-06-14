@@ -63,7 +63,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => GamePageWidget(
-                                  correct: homePageUsersRecord.correct,
+                                  correct: 99,
                                 ),
                               ),
                             );
