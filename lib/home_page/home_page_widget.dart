@@ -1,8 +1,10 @@
 import '../auth/auth_util.dart';
+import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../game_page/game_page_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,145 +17,89 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget> {
-  TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    super.initState();
-    textController = TextEditingController();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment(0, 0),
-            child: Image.network(
-              'https://picsum.photos/seed/315/600',
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Align(
-            alignment: Alignment(0, 0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: textController,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: 'Scrie Ceva',
-                          hintStyle: FlutterFlowTheme.title1.override(
-                            fontFamily: 'Poppins',
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1,
-                            ),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              topRight: Radius.circular(4.0),
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1,
-                            ),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              topRight: Radius.circular(4.0),
-                            ),
-                          ),
-                        ),
-                        style: FlutterFlowTheme.title1.override(
-                          fontFamily: 'Poppins',
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  ],
+    return StreamBuilder<UsersRecord>(
+      stream: UsersRecord.getDocument(currentUserReference),
+      builder: (context, snapshot) {
+        // Customize what your widget looks like when it's loading.
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        final homePageUsersRecord = snapshot.data;
+        return Scaffold(
+          key: scaffoldKey,
+          body: Stack(
+            children: [
+              Align(
+                alignment: Alignment(0, 0),
+                child: Image.network(
+                  'https://picsum.photos/seed/315/600',
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.cover,
                 ),
-                FFButtonWidget(
-                  onPressed: () async {
-                    final guess = int.parse(textController.text);
-
-                    final usersRecordData = createUsersRecordData(
-                      guess: guess,
-                    );
-
-                    await currentUserReference.update(usersRecordData);
-                  },
-                  text: 'Button',
-                  options: FFButtonOptions(
-                    width: 130,
-                    height: 40,
-                    color: Color(0x7A3474E0),
-                    textStyle: FlutterFlowTheme.title1.override(
-                      fontFamily: 'Poppins',
-                    ),
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
-                    ),
-                    borderRadius: 12,
-                  ),
-                ),
-                Row(
+              ),
+              Align(
+                alignment: Alignment(0, 0),
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'Asta e ceea ce ai scris:',
-                      style: FlutterFlowTheme.title1.override(
-                        fontFamily: 'Poppins',
-                        color: FlutterFlowTheme.tertiaryColor,
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    StreamBuilder<UsersRecord>(
-                      stream: UsersRecord.getDocument(currentUserReference),
+                    FutureBuilder<dynamic>(
+                      future: getRandomNumberCall(),
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
                         }
-                        final textUsersRecord = snapshot.data;
-                        return Text(
-                          textUsersRecord.guess.toString(),
-                          style: FlutterFlowTheme.title1.override(
-                            fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.tertiaryColor,
+                        final buttonGetRandomNumberResponse = snapshot.data;
+                        return FFButtonWidget(
+                          onPressed: () async {
+                            final correct = getJsonField(
+                                buttonGetRandomNumberResponse,
+                                r'$.correct_number');
+
+                            final usersRecordData = createUsersRecordData(
+                              correct: correct,
+                            );
+
+                            await homePageUsersRecord.reference
+                                .update(usersRecordData);
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GamePageWidget(),
+                              ),
+                            );
+                          },
+                          text: 'Play',
+                          options: FFButtonOptions(
+                            width: 130,
+                            height: 40,
+                            color: Color(0x7A3474E0),
+                            textStyle: FlutterFlowTheme.title1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            borderRadius: 12,
                           ),
                         );
                       },
                     )
                   ],
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -38,6 +38,12 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
   int get guess;
 
   @nullable
+  int get correct;
+
+  @nullable
+  String get response;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -47,7 +53,9 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..photoUrl = ''
     ..uid = ''
     ..phoneNumber = ''
-    ..guess = 0;
+    ..guess = 0
+    ..correct = 0
+    ..response = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -69,6 +77,8 @@ Map<String, dynamic> createUsersRecordData({
   DateTime createdTime,
   String phoneNumber,
   int guess,
+  int correct,
+  String response,
 }) =>
     serializers.toFirestore(
         UsersRecord.serializer,
@@ -79,7 +89,9 @@ Map<String, dynamic> createUsersRecordData({
           ..uid = uid
           ..createdTime = createdTime
           ..phoneNumber = phoneNumber
-          ..guess = guess));
+          ..guess = guess
+          ..correct = correct
+          ..response = response));
 
 UsersRecord get dummyUsersRecord {
   final builder = UsersRecordBuilder()
@@ -89,7 +101,9 @@ UsersRecord get dummyUsersRecord {
     ..uid = dummyString
     ..createdTime = dummyTimestamp
     ..phoneNumber = dummyString
-    ..guess = dummyInteger;
+    ..guess = dummyInteger
+    ..correct = dummyInteger
+    ..response = dummyString;
   return builder.build();
 }
 

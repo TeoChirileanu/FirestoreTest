@@ -1,0 +1,195 @@
+import '../auth/auth_util.dart';
+import '../backend/api_requests/api_calls.dart';
+import '../backend/backend.dart';
+import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class GamePageWidget extends StatefulWidget {
+  GamePageWidget({Key key}) : super(key: key);
+
+  @override
+  _GamePageWidgetState createState() => _GamePageWidgetState();
+}
+
+class _GamePageWidgetState extends State<GamePageWidget> {
+  TextEditingController textController;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    textController = TextEditingController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: scaffoldKey,
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment(0, 0),
+            child: Image.network(
+              'https://picsum.photos/seed/315/600',
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Align(
+            alignment: Alignment(0, 0),
+            child: StreamBuilder<UsersRecord>(
+              stream: UsersRecord.getDocument(currentUserReference),
+              builder: (context, snapshot) {
+                // Customize what your widget looks like when it's loading.
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                final columnUsersRecord = snapshot.data;
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: textController,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: 'Enter Your Guess',
+                              hintStyle: FlutterFlowTheme.title1.override(
+                                fontFamily: 'Poppins',
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                            ),
+                            style: FlutterFlowTheme.title1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ],
+                    ),
+                    FutureBuilder<dynamic>(
+                      future: checkGuessCall(
+                        guess: columnUsersRecord.guess,
+                        answer: columnUsersRecord.correct,
+                      ),
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        final buttonCheckGuessResponse = snapshot.data;
+                        return FFButtonWidget(
+                          onPressed: () async {
+                            final guess = int.parse(textController.text);
+
+                            final usersRecordData = createUsersRecordData(
+                              guess: guess,
+                            );
+
+                            await currentUserReference.update(usersRecordData);
+                            final response = getJsonField(
+                                    buttonCheckGuessResponse, r'$.verdict')
+                                .toString();
+
+                            final usersRecordData = createUsersRecordData(
+                              response: response,
+                            );
+
+                            await currentUserReference.update(usersRecordData);
+                          },
+                          text: 'Check Guess',
+                          options: FFButtonOptions(
+                            width: 180,
+                            height: 40,
+                            color: Color(0x7A3474E0),
+                            textStyle: FlutterFlowTheme.title1.override(
+                              fontFamily: 'Poppins',
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            borderRadius: 12,
+                          ),
+                        );
+                      },
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Your Result:',
+                          style: FlutterFlowTheme.title1.override(
+                            fontFamily: 'Poppins',
+                            color: FlutterFlowTheme.tertiaryColor,
+                          ),
+                        )
+                      ],
+                    ),
+                    FutureBuilder<dynamic>(
+                      future: checkGuessCall(
+                        answer: columnUsersRecord.correct,
+                        guess: columnUsersRecord.guess,
+                      ),
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        final rowCheckGuessResponse = snapshot.data;
+                        return Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              columnUsersRecord.response,
+                              style: FlutterFlowTheme.title1.override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.tertiaryColor,
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    )
+                  ],
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

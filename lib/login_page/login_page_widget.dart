@@ -8,7 +8,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPageWidget extends StatefulWidget {
-  LoginPageWidget({Key key}) : super(key: key);
+  LoginPageWidget({
+    Key key,
+    this.correctGuess,
+  }) : super(key: key);
+
+  final int correctGuess;
 
   @override
   _LoginPageWidgetState createState() => _LoginPageWidgetState();
