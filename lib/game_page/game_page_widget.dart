@@ -111,17 +111,12 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                         return FFButtonWidget(
                           onPressed: () async {
                             final guess = int.parse(textController.text);
-
-                            final usersRecordData = createUsersRecordData(
-                              guess: guess,
-                            );
-
-                            await currentUserReference.update(usersRecordData);
                             final response = getJsonField(
                                     buttonCheckGuessResponse, r'$.verdict')
                                 .toString();
 
                             final usersRecordData = createUsersRecordData(
+                              guess: guess,
                               response: response,
                             );
 
