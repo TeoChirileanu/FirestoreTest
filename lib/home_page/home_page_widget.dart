@@ -131,12 +131,22 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      textController.text,
-                      style: FlutterFlowTheme.title1.override(
-                        fontFamily: 'Poppins',
-                        color: FlutterFlowTheme.tertiaryColor,
-                      ),
+                    StreamBuilder<UsersRecord>(
+                      stream: UsersRecord.getDocument(currentUserReference),
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        final textUsersRecord = snapshot.data;
+                        return Text(
+                          textUsersRecord.guess.toString(),
+                          style: FlutterFlowTheme.title1.override(
+                            fontFamily: 'Poppins',
+                            color: FlutterFlowTheme.tertiaryColor,
+                          ),
+                        );
+                      },
                     )
                   ],
                 )
