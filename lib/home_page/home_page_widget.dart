@@ -73,8 +73,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                               correct: correct,
                             );
 
-                            await homePageUsersRecord.reference
-                                .update(usersRecordData);
+                            await currentUserReference.update(usersRecordData);
                           },
                           text: 'Play',
                           options: FFButtonOptions(
