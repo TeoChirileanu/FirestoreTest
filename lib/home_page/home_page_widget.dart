@@ -98,13 +98,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     );
 
                     await currentUserReference.update(usersRecordData);
-                    final guess = 0;
-
-                    final usersRecordData = createUsersRecordData(
-                      guess: guess,
-                    );
-
-                    await currentUserReference.update(usersRecordData);
                   },
                   text: 'Button',
                   options: FFButtonOptions(
