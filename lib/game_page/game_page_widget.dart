@@ -1,11 +1,8 @@
 import '../auth/auth_util.dart';
 import '../backend/api_requests/api_calls.dart';
-import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
 import '../home_page/home_page_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class GamePageWidget extends StatefulWidget {
@@ -23,7 +20,7 @@ class GamePageWidget extends StatefulWidget {
 class _GamePageWidgetState extends State<GamePageWidget> {
   TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  String _verdict;
+  String _verdict = "";
 
   @override
   void initState() {
@@ -66,6 +63,20 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                     Expanded(
                       child: TextFormField(
                         controller: textController,
+                        onChanged: (guess) async {
+                          var verdict = "";
+                          try {
+                            var answer = widget.answer;
+                            var url = Uri.parse(
+                                "https://europe-central2-guessing-game-backend.cloudfunctions.net/"
+                                "check-guess?guess=$guess&answer=$answer");
+                            var response = await http.get(url);
+                            verdict = response.body;
+                          } catch (e) {
+                            verdict = e.toString();
+                          }
+                          setState(() => _verdict = verdict);
+                        },
                         obscureText: false,
                         decoration: InputDecoration(
                           enabledBorder: UnderlineInputBorder(
@@ -114,26 +125,13 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FutureBuilder<dynamic>(
-                      future: checkGuessCall(
-                        guess: int.parse(textController.text),
-                        answer: int.parse(textController.text),
+                    Text(
+                      _verdict,
+                      style: FlutterFlowTheme.title1.override(
+                        fontFamily: 'Poppins',
+                        color: FlutterFlowTheme.tertiaryColor,
                       ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        final textCheckGuessResponse = snapshot.data;
-                        return Text(
-                          'Hello World',
-                          style: FlutterFlowTheme.title1.override(
-                            fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.tertiaryColor,
-                          ),
-                        );
-                      },
-                    )
+                    ),
                   ],
                 ),
                 IconButton(
