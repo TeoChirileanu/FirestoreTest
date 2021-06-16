@@ -157,7 +157,8 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                             }
                             final textCheckGuessResponse = snapshot.data;
                             return Text(
-                              'Hello World',
+                              getJsonField(textCheckGuessResponse, r'$.verdict')
+                                  .toString(),
                               style: FlutterFlowTheme.title1.override(
                                 fontFamily: 'Poppins',
                                 color: FlutterFlowTheme.tertiaryColor,
