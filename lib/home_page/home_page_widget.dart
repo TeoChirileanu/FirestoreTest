@@ -1,3 +1,4 @@
+import '../auth/auth_util.dart';
 import '../backend/api_requests/api_calls.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -58,6 +59,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             ),
                           ),
                         );
+                        final user = await signInAnonymously(context);
+                        if (user == null) {
+                          return;
+                        }
                       },
                       text: 'Play',
                       options: FFButtonOptions(
