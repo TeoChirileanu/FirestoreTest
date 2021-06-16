@@ -6,6 +6,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../home_page/home_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class GamePageWidget extends StatefulWidget {
   GamePageWidget({
@@ -22,6 +23,7 @@ class GamePageWidget extends StatefulWidget {
 class _GamePageWidgetState extends State<GamePageWidget> {
   TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  String _verdict;
 
   @override
   void initState() {

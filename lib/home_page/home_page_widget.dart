@@ -6,6 +6,7 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import '../game_page/game_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class HomePageWidget extends StatefulWidget {
   HomePageWidget({Key key}) : super(key: key);
@@ -46,16 +47,22 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     if (!snapshot.hasData) {
                       return Center(child: CircularProgressIndicator());
                     }
-                    final buttonGetRandomNumberResponse = snapshot.data;
                     return FFButtonWidget(
                       onPressed: () async {
+                        var randomNumber = "";
+                        try {
+                          var url = Uri.parse("https://cutt.ly/UnL0wJE");
+                          var response = await http.get(url);
+                          randomNumber = response.body;
+                        }
+                        catch(e) {
+                          randomNumber = e.toString();
+                        }
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => GamePageWidget(
-                              answer: getJsonField(
-                                      buttonGetRandomNumberResponse, r'$')
-                                  .toString(),
+                              answer: randomNumber
                             ),
                           ),
                         );
