@@ -5,7 +5,6 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../login_page/login_page_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -101,17 +100,8 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                       ],
                     ),
                     FFButtonWidget(
-                      onPressed: () async {
-                        final guess = int.parse(textController.text);
-                        final correct =
-                            getJsonField(buttonResponse, r'$.verdict');
-
-                        final usersRecordData = createUsersRecordData(
-                          guess: guess,
-                          correct: correct,
-                        );
-
-                        await currentUserReference.update(usersRecordData);
+                      onPressed: () {
+                        print('Button pressed ...');
                       },
                       text: 'Check',
                       options: FFButtonOptions(
