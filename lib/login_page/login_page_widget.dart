@@ -4,7 +4,6 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../home_page/home_page_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPageWidget extends StatefulWidget {
@@ -47,52 +46,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                      child: FaIcon(
-                        FontAwesomeIcons.google,
-                        color: FlutterFlowTheme.tertiaryColor,
-                        size: 30,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          final user = await signInWithGoogle(context);
-                          if (user == null) {
-                            return;
-                          }
-                          await Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePageWidget(),
-                            ),
-                            (r) => false,
-                          );
-                        },
-                        text: 'Login\n',
-                        options: FFButtonOptions(
-                          width: 130,
-                          height: 40,
-                          color: FlutterFlowTheme.primaryColor,
-                          textStyle: FlutterFlowTheme.title1.override(
-                            fontFamily: 'Poppins',
-                          ),
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                          borderRadius: 12,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
                     FFButtonWidget(
                       onPressed: () async {
                         final user = await signInAnonymously(context);
@@ -111,10 +64,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       options: FFButtonOptions(
                         width: 130,
                         height: 40,
-                        color: FlutterFlowTheme.primaryColor,
-                        textStyle: FlutterFlowTheme.subtitle2.override(
+                        color: Color(0xAD3474E0),
+                        textStyle: FlutterFlowTheme.title1.override(
                           fontFamily: 'Poppins',
-                          color: Colors.white,
                         ),
                         borderSide: BorderSide(
                           color: Colors.transparent,

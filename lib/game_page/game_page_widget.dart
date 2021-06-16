@@ -100,46 +100,33 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                         )
                       ],
                     ),
-                    FutureBuilder<dynamic>(
-                      future: checkGuessCall(
-                        guess: gamePageUsersRecord.guess,
-                        answer: gamePageUsersRecord.correct,
-                      ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        final buttonCheckGuessResponse = snapshot.data;
-                        return FFButtonWidget(
-                          onPressed: () async {
-                            final guess = int.parse(textController.text);
-                            final correct = getJsonField(
-                                buttonCheckGuessResponse, r'$.verdict');
+                    FFButtonWidget(
+                      onPressed: () async {
+                        final guess = int.parse(textController.text);
+                        final correct =
+                            getJsonField(buttonResponse, r'$.verdict');
 
-                            final usersRecordData = createUsersRecordData(
-                              guess: guess,
-                              correct: correct,
-                            );
-
-                            await currentUserReference.update(usersRecordData);
-                          },
-                          text: 'Check',
-                          options: FFButtonOptions(
-                            width: 130,
-                            height: 40,
-                            color: FlutterFlowTheme.primaryColor,
-                            textStyle: FlutterFlowTheme.title1.override(
-                              fontFamily: 'Poppins',
-                            ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: 12,
-                          ),
+                        final usersRecordData = createUsersRecordData(
+                          guess: guess,
+                          correct: correct,
                         );
+
+                        await currentUserReference.update(usersRecordData);
                       },
+                      text: 'Check',
+                      options: FFButtonOptions(
+                        width: 130,
+                        height: 40,
+                        color: FlutterFlowTheme.primaryColor,
+                        textStyle: FlutterFlowTheme.title1.override(
+                          fontFamily: 'Poppins',
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: 12,
+                      ),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -158,12 +145,25 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          gamePageUsersRecord.response,
-                          style: FlutterFlowTheme.title1.override(
-                            fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.tertiaryColor,
+                        FutureBuilder<dynamic>(
+                          future: checkGuessCall(
+                            guess: int.parse(textController.text),
+                            answer: int.parse(textController.text),
                           ),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            final textCheckGuessResponse = snapshot.data;
+                            return Text(
+                              'Hello World',
+                              style: FlutterFlowTheme.title1.override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.tertiaryColor,
+                              ),
+                            );
+                          },
                         )
                       ],
                     ),
