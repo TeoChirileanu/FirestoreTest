@@ -9,7 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GamePageWidget extends StatefulWidget {
-  GamePageWidget({Key key}) : super(key: key);
+  GamePageWidget({
+    Key key,
+    this.answer,
+  }) : super(key: key);
+
+  final String answer;
 
   @override
   _GamePageWidgetState createState() => _GamePageWidgetState();
